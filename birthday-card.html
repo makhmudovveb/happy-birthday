@@ -1,0 +1,1583 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>С Днём Рождения 🎁</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Quicksand:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #210b18;
+        --bg2: #33112a;
+        --gold: #f2b807;
+        --red: #d6274b;
+        --rose: #ff7aa2;
+        --mint: #3fd6b0;
+        --cream: #fff6e9;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        box-sizing: border-box;
+      }
+      * {
+        box-sizing: inherit;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+      body {
+        background: radial-gradient(
+          ellipse at 50% -10%,
+          var(--bg2),
+          var(--bg) 70%
+        );
+        color: var(--cream);
+        font-family: "Quicksand", sans-serif;
+        overflow-x: hidden;
+        position: relative;
+      }
+      h1,
+      h2,
+      .hand {
+        font-family: "Caveat", cursive;
+      }
+      #confetti {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 40;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+        }
+      }
+
+      /* ---------- gift intro ---------- */
+      .gift-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+        background: var(--bg);
+        transition:
+          opacity 0.6s ease,
+          visibility 0.6s ease;
+      }
+      .gift-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .gift-screen p.intro {
+        color: #fff9;
+        font-size: 1.15rem;
+        max-width: 320px;
+        margin: 0 0 26px;
+      }
+      .box {
+        width: 140px;
+        height: 110px;
+        position: relative;
+        margin-bottom: 10px;
+        cursor: pointer;
+      }
+      .box .body {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 76px;
+        background: linear-gradient(135deg, var(--red), #a11538);
+        border-radius: 4px;
+        box-shadow: 0 16px 30px #0007;
+        transition: transform 0.6s ease;
+      }
+      .box .lid {
+        position: absolute;
+        top: 12px;
+        width: 100%;
+        height: 26px;
+        background: linear-gradient(135deg, #e63862, var(--red));
+        border-radius: 4px;
+        box-shadow: 0 6px 10px #0005;
+        transition:
+          transform 0.6s cubic-bezier(0.6, -0.3, 0.3, 1.4),
+          opacity 0.5s;
+        transform-origin: center;
+        z-index: 3;
+      }
+      .box .ribbon-v {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        width: 16px;
+        height: 100%;
+        transform: translateX(-50%);
+        background: var(--gold);
+        z-index: 2;
+        transition:
+          transform 0.5s ease,
+          opacity 0.5s ease;
+      }
+      .box .ribbon-h {
+        position: absolute;
+        top: 38px;
+        left: 0;
+        width: 100%;
+        height: 16px;
+        background: var(--gold);
+        z-index: 2;
+        transition:
+          transform 0.5s ease,
+          opacity 0.5s ease;
+      }
+      .box .bow {
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.8rem;
+        z-index: 4;
+        transition:
+          transform 0.5s ease,
+          opacity 0.4s ease;
+      }
+      .box.open .lid {
+        transform: translateY(-70px) rotate(-25deg);
+        opacity: 0;
+      }
+      .box.open .bow {
+        transform: translate(-50%, -60px) rotate(20deg);
+        opacity: 0;
+      }
+      .box.open .ribbon-v {
+        transform: translateX(-140%);
+        opacity: 0;
+      }
+      .box.open .ribbon-h {
+        transform: translateX(140%);
+        opacity: 0;
+      }
+      .box.open .body {
+        transform: scale(1.05);
+      }
+      .tap-hint {
+        margin-top: 16px;
+        font-size: 0.9rem;
+        color: #fff7;
+      }
+
+      /* ---------- main ---------- */
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 60px 18px 90px;
+        position: relative;
+        z-index: 2;
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      main.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      header.hero {
+        text-align: center;
+        margin-bottom: 44px;
+      }
+      .headline {
+        font-size: clamp(2.1rem, 9vw, 3.6rem);
+        color: var(--gold);
+        line-height: 1.1;
+        margin: 0 0 6px;
+        text-shadow: 0 3px 0 #0004;
+      }
+      .name-field {
+        display: inline-block;
+        background: transparent;
+        border-bottom: 3px dashed var(--rose);
+        color: var(--cream);
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+        font-size: clamp(1.6rem, 6vw, 2.4rem);
+        text-align: center;
+        min-width: 180px;
+        max-width: 90vw;
+        padding: 0 12px 2px;
+      }
+      .typewriter {
+        max-width: 480px;
+        margin: 20px auto 0;
+        min-height: 3.2em;
+        color: #fff9;
+        line-height: 1.6;
+        font-size: 1.05rem;
+      }
+      .typewriter .cursor {
+        display: inline-block;
+        width: 2px;
+        background: var(--gold);
+        margin-left: 2px;
+        animation: blink 1s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      .age-box {
+        margin: 26px auto 0;
+        max-width: 320px;
+        background: #ffffff10;
+        border: 1px solid #ffffff22;
+        border-radius: 14px;
+        padding: 16px 18px;
+      }
+      .age-box label {
+        display: block;
+        font-size: 0.85rem;
+        color: #fff9;
+        margin-bottom: 6px;
+      }
+      .age-box input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid var(--mint);
+        color: var(--cream);
+        font-family: "Quicksand", sans-serif;
+        font-size: 1.05rem;
+        text-align: center;
+        outline: none;
+        padding: 4px;
+      }
+      .age-result {
+        margin-top: 10px;
+        font-family: "Caveat", cursive;
+        font-size: 1.6rem;
+        color: var(--mint);
+        min-height: 1.6em;
+      }
+
+      /* ---------- timeline ---------- */
+      section.timeline {
+        max-width: 560px;
+        margin: 0 auto 60px;
+      }
+      .section-title {
+        text-align: center;
+        font-size: 1.7rem;
+        color: var(--rose);
+        margin-bottom: 26px;
+      }
+      .tl-item {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 22px;
+        position: relative;
+        padding-left: 6px;
+      }
+      .tl-item::before {
+        content: "";
+        position: absolute;
+        left: 20px;
+        top: 34px;
+        bottom: -22px;
+        width: 2px;
+        background: #ffffff22;
+      }
+      .tl-item:last-child::before {
+        display: none;
+      }
+      .tl-dot {
+        flex: 0 0 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ffffff12;
+        border: 2px solid var(--gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+      }
+      .tl-text {
+        flex: 1;
+        background: #ffffff0d;
+        border-radius: 10px;
+        padding: 10px 14px;
+      }
+      .tl-year {
+        font-family: "Caveat", cursive;
+        font-size: 1.3rem;
+        color: var(--gold);
+        outline: none;
+      }
+      .tl-desc {
+        font-size: 0.98rem;
+        color: #fff9;
+        outline: none;
+        margin-top: 2px;
+      }
+      .tl-text [contenteditable]:focus {
+        background: #ffffff10;
+        border-radius: 4px;
+      }
+      .tl-hint {
+        text-align: center;
+        font-size: 0.78rem;
+        color: #fff6;
+        margin-top: 6px;
+      }
+
+      /* ---------- album ---------- */
+      section.album {
+        margin-bottom: 70px;
+      }
+      .table-surface {
+        position: relative;
+        min-height: 420px;
+        border-radius: 16px;
+        background: repeating-linear-gradient(
+          90deg,
+          #5a3a24,
+          #5a3a24 22px,
+          #4e3220 22px,
+          #4e3220 44px
+        );
+        box-shadow:
+          inset 0 0 60px #00000060,
+          0 16px 30px #0006;
+        padding: 20px;
+        overflow: hidden;
+      }
+      .polaroid {
+        position: absolute;
+        width: 150px;
+        background: var(--cream);
+        border-radius: 4px;
+        padding: 10px 10px 34px;
+        box-shadow: 0 12px 20px #0006;
+        cursor: grab;
+        touch-action: none;
+        perspective: 800px;
+      }
+      .polaroid:active {
+        cursor: grabbing;
+      }
+      .p-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+      .polaroid.flipped .p-inner {
+        transform: rotateY(180deg);
+      }
+      .p-front,
+      .p-back {
+        backface-visibility: hidden;
+        position: absolute;
+        inset: 0;
+      }
+      .p-back {
+        transform: rotateY(180deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        background: var(--cream);
+        border-radius: 4px;
+      }
+      .p-back p {
+        font-family: "Caveat", cursive;
+        font-size: 1.05rem;
+        color: #3a2a17;
+        text-align: center;
+        line-height: 1.4;
+        margin: 0;
+      }
+      .slot {
+        width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.1rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .slot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+      }
+      .caption {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-family: "Caveat", cursive;
+        font-size: 1rem;
+        color: #fff;
+      }
+      .s1 {
+        background: linear-gradient(135deg, #ffd3a5, #fd9853);
+      }
+      .s2 {
+        background: linear-gradient(135deg, #a8e6cf, #3fbf9e);
+      }
+      .s3 {
+        background: linear-gradient(135deg, #ff9ebb, #ff5c8a);
+      }
+      .s4 {
+        background: linear-gradient(135deg, #a1c4fd, #5b8def);
+      }
+      .album-hint {
+        text-align: center;
+        font-size: 0.8rem;
+        color: #fff6;
+        margin-top: 12px;
+      }
+
+      /* ---------- cake ---------- */
+      section.cake {
+        text-align: center;
+        max-width: 420px;
+        margin: 0 auto;
+      }
+      .cake-wrap {
+        position: relative;
+        width: 180px;
+        height: 150px;
+        margin: 0 auto 16px;
+      }
+      .layer {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 8px;
+      }
+      .layer.bottom {
+        width: 180px;
+        height: 60px;
+        bottom: 0;
+        background: linear-gradient(180deg, #d98ba6, #b8567f);
+      }
+      .layer.top {
+        width: 130px;
+        height: 50px;
+        bottom: 56px;
+        background: linear-gradient(180deg, #f2c6d8, #e091b0);
+      }
+      .drip {
+        position: absolute;
+        bottom: 54px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 132px;
+        height: 14px;
+        background: radial-gradient(circle, #fff 40%, transparent 41%) repeat-x;
+        background-size: 16px 14px;
+        opacity: 0.9;
+      }
+      .candle {
+        position: absolute;
+        bottom: 104px;
+        width: 6px;
+        height: 34px;
+        background: linear-gradient(90deg, #f7e1b5, #efc97a);
+        border-radius: 2px;
+      }
+      .candle.c1 {
+        left: 60px;
+      }
+      .candle.c2 {
+        left: 87px;
+        height: 40px;
+      }
+      .candle.c3 {
+        left: 114px;
+      }
+      .flame {
+        position: absolute;
+        top: -16px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10px;
+        height: 16px;
+        border-radius: 50%/60% 60% 40% 40%;
+        background: radial-gradient(
+          circle at 50% 70%,
+          #fff59a,
+          var(--gold) 55%,
+          #ff7a3d 90%
+        );
+        animation: flicker 1.3s ease-in-out infinite;
+      }
+      @keyframes flicker {
+        0%,
+        100% {
+          transform: translateX(-50%) scale(1) rotate(-3deg);
+        }
+        50% {
+          transform: translateX(-50%) scale(1.1) rotate(3deg);
+        }
+      }
+      .cake-wrap.blown .flame {
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .blow-hint {
+        font-size: 0.9rem;
+        color: #fff9;
+        margin-bottom: 6px;
+      }
+      .mic-status {
+        font-size: 0.78rem;
+        color: #fff6;
+        margin-bottom: 14px;
+      }
+      .blow-btn {
+        font-family: "Quicksand", sans-serif;
+        font-weight: 700;
+        background: var(--gold);
+        color: #2a1a00;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 6px 14px #0005;
+      }
+      .wish-reveal {
+        margin-top: 18px;
+        font-family: "Caveat", cursive;
+        font-size: 1.5rem;
+        color: var(--mint);
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+          opacity 0.5s,
+          transform 0.5s;
+      }
+      .wish-reveal.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      footer {
+        text-align: center;
+        font-size: 0.8rem;
+        color: #fff5;
+        padding: 30px 20px;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* ---------- fancy letter-in effect ---------- */
+      .letterspan {
+        display: inline-block;
+        opacity: 0;
+        filter: blur(2px);
+        transform: translateY(6px);
+        animation: letterIn 0.5s ease forwards;
+      }
+      @keyframes letterIn {
+        to {
+          opacity: 1;
+          filter: blur(0);
+          transform: translateY(0);
+        }
+      }
+
+      /* ---------- mood letters ---------- */
+      section.letters {
+        max-width: 520px;
+        margin: 0 auto 70px;
+        text-align: center;
+      }
+      .mood-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      .mood-btn {
+        font-family: "Quicksand", sans-serif;
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: var(--cream);
+        background: #ffffff10;
+        border: 1px solid #ffffff28;
+        border-radius: 14px;
+        padding: 16px 10px;
+        cursor: pointer;
+        line-height: 1.5;
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease;
+      }
+      .mood-btn:hover {
+        transform: translateY(-3px);
+        background: #ffffff1c;
+      }
+      .letter-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 55;
+        background: #000000b0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.3s,
+          visibility 0.3s;
+      }
+      .letter-modal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .letter-card {
+        background: var(--cream);
+        color: #3a2a17;
+        border-radius: 12px;
+        max-width: 420px;
+        width: 100%;
+        padding: 34px 26px 28px;
+        position: relative;
+        box-shadow: 0 20px 50px #0008;
+        text-align: center;
+      }
+      .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+        cursor: pointer;
+        color: #3a2a17;
+      }
+      .letter-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      .letter-text {
+        font-family: "Caveat", cursive;
+        font-size: 1.35rem;
+        line-height: 1.5;
+        margin: 0;
+        min-height: 3em;
+      }
+
+      /* ---------- music (text-only player) ---------- */
+      section.music {
+        max-width: 420px;
+        margin: 0 auto 70px;
+        text-align: center;
+      }
+      .player-card {
+        background: #ffffff10;
+        border: 1px solid #ffffff22;
+        border-radius: 18px;
+        padding: 26px 22px;
+      }
+      .vinyl {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          #111 40%,
+          var(--gold) 41% 44%,
+          #111 45%
+        );
+        margin: 0 auto 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gold);
+        font-size: 1.2rem;
+        animation: spin 4s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .song-title {
+        font-family: "Caveat", cursive;
+        font-size: 1.5rem;
+        color: var(--gold);
+        margin-bottom: 14px;
+      }
+      .bars {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 5px;
+        height: 34px;
+        margin-bottom: 14px;
+      }
+      .bars span {
+        width: 5px;
+        background: var(--mint);
+        border-radius: 2px;
+        animation: eq 1.1s ease-in-out infinite;
+      }
+      .bars span:nth-child(1) {
+        height: 40%;
+        animation-delay: 0s;
+      }
+      .bars span:nth-child(2) {
+        height: 70%;
+        animation-delay: 0.1s;
+      }
+      .bars span:nth-child(3) {
+        height: 100%;
+        animation-delay: 0.2s;
+      }
+      .bars span:nth-child(4) {
+        height: 55%;
+        animation-delay: 0.3s;
+      }
+      .bars span:nth-child(5) {
+        height: 85%;
+        animation-delay: 0.4s;
+      }
+      .bars span:nth-child(6) {
+        height: 45%;
+        animation-delay: 0.5s;
+      }
+      .bars span:nth-child(7) {
+        height: 65%;
+        animation-delay: 0.6s;
+      }
+      @keyframes eq {
+        0%,
+        100% {
+          transform: scaleY(0.4);
+        }
+        50% {
+          transform: scaleY(1);
+        }
+      }
+      .timeline-bar {
+        height: 4px;
+        background: #ffffff22;
+        border-radius: 2px;
+        margin-bottom: 16px;
+        overflow: hidden;
+      }
+      .timeline-bar i {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: var(--rose);
+        animation: progress 8s linear infinite;
+      }
+      @keyframes progress {
+        to {
+          width: 100%;
+        }
+      }
+      .lyric {
+        font-family: "Caveat", cursive;
+        font-size: 1.25rem;
+        color: #fff9;
+        line-height: 1.5;
+        min-height: 2.4em;
+      }
+
+      /* ---------- universe ---------- */
+      section.universe {
+        max-width: 640px;
+        margin: 0 auto 40px;
+        text-align: center;
+      }
+      .sky {
+        position: relative;
+        height: 340px;
+        border-radius: 16px;
+        overflow: hidden;
+        background: radial-gradient(ellipse at 50% 30%, #1a1040, #05030f 75%);
+        box-shadow: inset 0 0 60px #00000080;
+      }
+      .dot {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #fff;
+        border-radius: 50%;
+        animation: twinkleStar 3s ease-in-out infinite;
+      }
+      @keyframes twinkleStar {
+        0%,
+        100% {
+          opacity: 0.2;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      .wish-star {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        font-size: 1.3rem;
+        filter: drop-shadow(0 0 6px currentColor);
+        color: var(--gold);
+        animation: pulseStar 2.4s ease-in-out infinite;
+        background: none;
+        border: none;
+        padding: 6px;
+        line-height: 1;
+      }
+      .wish-star.named {
+        font-size: 1.7rem;
+        color: var(--rose);
+      }
+      @keyframes pulseStar {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.25);
+        }
+      }
+      .universe-caption {
+        margin-top: 18px;
+        font-family: "Caveat", cursive;
+        font-size: 1.3rem;
+        color: var(--mint);
+        min-height: 2.4em;
+        max-width: 460px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="confetti"></canvas>
+
+    <div class="gift-screen" id="giftScreen">
+      <p class="intro">У тебя есть одно неоткрытое послание…</p>
+      <div class="box" id="box">
+        <div class="bow">🎀</div>
+        <div class="lid"></div>
+        <div class="ribbon-v"></div>
+        <div class="ribbon-h"></div>
+        <div class="body"></div>
+      </div>
+      <div class="tap-hint">нажми на подарок, чтобы открыть</div>
+    </div>
+
+    <main id="main">
+      <header class="hero">
+        <h1 class="headline">С Днём Рождения,</h1>
+        <div class="name-field" id="nameField"></div>
+        <p class="typewriter" id="typewriter"></p>
+
+        <div class="age-box">
+          <label>Год рождения</label>
+          <div class="age-result" id="ageResult"></div>
+        </div>
+      </header>
+
+      <section class="timeline">
+        <div class="section-title hand">Наша история</div>
+        <div id="historyList"></div>
+      </section>
+
+      <section class="album">
+        <div class="section-title hand">Фотографии на столе</div>
+        <div class="table-surface" id="table">
+          <!-- Фото 1 -->
+          <div
+            class="polaroid"
+            style="left: 5%; top: 7%; transform: rotate(-7deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s1">
+                  <img src="images/IMG_0704.JPG" alt="Фото 1" />
+                </label>
+                <div class="caption">лето</div>
+              </div>
+              <div class="p-back">
+                <p>Тот самый день, который хочется сохранить навсегда.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Фото 2 -->
+          <div
+            class="polaroid"
+            style="left: 29%; top: 5%; transform: rotate(5deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s2">
+                  <img src="images/IMG_0706.JPG" alt="Фото 2" />
+                </label>
+                <div class="caption">улыбка</div>
+              </div>
+              <div class="p-back">
+                <p>Такая улыбка способна сделать обычный день особенным.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Фото 3 -->
+          <div
+            class="polaroid"
+            style="left: 57%; top: 6%; transform: rotate(-4deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s3">
+                  <img src="images/IMG_0713.JPG" alt="Фото 3" />
+                </label>
+                <div class="caption">хорошее настроение</div>
+              </div>
+              <div class="p-back">
+                <p>
+                  Пусть таких счастливых моментов в жизни становится только
+                  больше.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Фото 4 -->
+          <div
+            class="polaroid"
+            style="left: 79%; top: 13%; transform: rotate(8deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s4">
+                  <img src="images/IMG_0916.JPG" alt="Фото 4" />
+                </label>
+                <div class="caption">маленький момент</div>
+              </div>
+              <div class="p-back">
+                <p>
+                  Иногда именно маленькие моменты становятся самыми дорогими
+                  воспоминаниями.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Фото 5 -->
+          <div
+            class="polaroid"
+            style="left: 13%; top: 32%; transform: rotate(6deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s5">
+                  <img src="images/IMG_1023.JPG" alt="Фото 5" />
+                </label>
+                <div class="caption">без повода</div>
+              </div>
+              <div class="p-back">
+                <p>Не нужен особый повод, чтобы запомнить хороший день.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Фото 6 -->
+          <div
+            class="polaroid"
+            style="left: 39%; top: 35%; transform: rotate(-6deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s6">
+                  <img src="images/IMG_1133.JPG" alt="Фото 6" />
+                </label>
+                <div class="caption">вместе</div>
+              </div>
+              <div class="p-back">
+                <p>
+                  Есть люди, рядом с которыми даже обычные моменты становятся
+                  особенными.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Фото 7 -->
+          <div
+            class="polaroid"
+            style="left: 66%; top: 34%; transform: rotate(7deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s7">
+                  <img src="images/IMG_2656.JPG" alt="Фото 7" />
+                </label>
+                <div class="caption">тот самый день</div>
+              </div>
+              <div class="p-back">
+                <p>
+                  Ещё одно воспоминание, которое хочется оставить в этой
+                  маленькой коллекции.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Фото 8 -->
+          <div
+            class="polaroid"
+            style="left: 84%; top: 43%; transform: rotate(-5deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s8">
+                  <img src="images/IMG_1918.JPG" alt="Фото 8" />
+                </label>
+                <div class="caption">счастье</div>
+              </div>
+              <div class="p-back">
+                <p>Пусть впереди будет ещё больше причин улыбаться.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Фото 9 -->
+          <div
+            class="polaroid"
+            style="left: 29%; top: 59%; transform: rotate(-8deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s9">
+                  <img src="images/IMG_1214.JPG" alt="Фото 9" />
+                </label>
+                <div class="caption">воспоминание</div>
+              </div>
+              <div class="p-back">
+                <p>Время проходит, а хорошие воспоминания остаются с нами.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Фото 10 -->
+          <div
+            class="polaroid"
+            style="left: 58%; top: 61%; transform: rotate(5deg)"
+          >
+            <div class="p-inner">
+              <div class="p-front">
+                <label class="slot s10">
+                  <img src="images/IMG_1211.JPG" alt="Фото 10" />
+                </label>
+                <div class="caption">особенный момент</div>
+              </div>
+              <div class="p-back">
+                <p>
+                  Пусть этот новый год жизни принесёт ещё больше красивых
+                  историй.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cake">
+        <div class="section-title hand">Загадай желание</div>
+        <div class="cake-wrap" id="cakeWrap">
+          <div class="layer top"></div>
+          <div class="drip"></div>
+          <div class="layer bottom"></div>
+          <div class="candle c1"><div class="flame"></div></div>
+          <div class="candle c2"><div class="flame"></div></div>
+          <div class="candle c3"><div class="flame"></div></div>
+        </div>
+        <div class="blow-hint">
+          разреши микрофон и подуй по-настоящему — или просто нажми на кнопку
+        </div>
+        <div class="mic-status" id="micStatus"></div>
+        <button class="blow-btn" id="blowBtn">Задуть свечи 💨</button>
+        <div class="wish-reveal" id="wishReveal">
+          Пусть всё, что ты загадал(а), обязательно сбудется 🌟
+        </div>
+      </section>
+      <section class="letters">
+        <div class="section-title hand">Открой письмо</div>
+        <div class="mood-grid">
+          <button class="mood-btn" data-mood="sad">
+            💌<br />когда грустно
+          </button>
+          <button class="mood-btn" data-mood="night">🌙<br />ночью</button>
+          <button class="mood-btn" data-mood="smile">
+            😂<br />хочешь улыбнуться
+          </button>
+          <button class="mood-btn" data-mood="now">❤️<br />прямо сейчас</button>
+        </div>
+      </section>
+
+      <section class="music">
+        <div class="section-title hand">Наша песня</div>
+        <div class="player-card">
+          <div class="vinyl">♫</div>
+          <div class="song-title">Our Song</div>
+          <div class="bars">
+            <span></span><span></span><span></span><span></span><span></span
+            ><span></span><span></span>
+          </div>
+          <div class="timeline-bar"><i></i></div>
+          <p class="lyric" id="lyricText"></p>
+        </div>
+      </section>
+
+      <section class="universe">
+        <div class="section-title hand">Вселенная для тебя</div>
+        <div class="sky" id="sky"></div>
+        <p class="universe-caption" id="universeCaption">нажми на звезду ⭐</p>
+      </section>
+    </main>
+
+    <div class="letter-modal" id="letterModal">
+      <div class="letter-card">
+        <button class="close-btn" id="closeLetter">✕</button>
+        <div class="letter-icon" id="letterIcon">💌</div>
+        <p class="letter-text" id="letterText"></p>
+      </div>
+    </div>
+
+    <footer>сделано с любовью, специально для тебя</footer>
+
+    <script>
+      /* =========================================================
+         НАСТРОЙКИ — ИЗМЕНЯЙТЕ ДАННЫЕ ТОЛЬКО ЗДЕСЬ
+         ========================================================= */
+      const CONFIG = {
+        name: "Kamola",
+
+        // Год рождения
+        birthYear: 2009,
+
+        // Ваша история — можно добавлять/удалять события
+        history: [
+          { icon: "📍", year: "2024", text: "Первое знакомство" },
+          { icon: "💬", year: "2024", text: "Впервые радостные встретили новый год" },
+          { icon: "😂", year: "2025", text: "Те дни когда мы начали много ссориться" },
+          { icon: "❤️", year: "2025", text: "Все также ссоримся" },
+          { icon: "✌️", year: "2026", text: "Жизнь продолжается" },
+          { icon: "🥲", year: "2026", text: "Мы начинаем новый этап" },
+          {
+            icon: "✨",
+            year: "Сегодня",
+            text: "День рождения — и продолжение истории",
+          },
+        ],
+
+        // Фотографии.
+        // Создайте рядом с HTML папку "images" и положите туда фотографии:
+        // images/photo1.jpg
+        // images/photo2.jpg
+        // images/photo3.jpg
+        // images/photo4.jpg
+        photos: [
+          {
+            src: "images/photo1.jpg",
+            caption: "лето",
+            message: "Здесь ты ещё не знала, сколько хорошего впереди.",
+          },
+          {
+            src: "images/photo2.jpg",
+            caption: "вечеринка",
+            message: "Именно тогда всё стало немного лучше.",
+          },
+          {
+            src: "images/photo3.jpg",
+            caption: "хорошее настроение",
+            message: "Смех в этот день был настоящим.",
+          },
+          {
+            src: "images/photo4.jpg",
+            caption: "с питомцем",
+            message: "Маленькие моменты — самые важные.",
+          },
+        ],
+      };
+
+      /* ---------- gift box open ---------- */
+
+      var giftScreen = document.getElementById("giftScreen");
+      var box = document.getElementById("box");
+      var mainEl = document.getElementById("main");
+      box.addEventListener("click", function () {
+        if (box.classList.contains("open")) return;
+        box.classList.add("open");
+        burstConfetti(70);
+        setTimeout(function () {
+          giftScreen.classList.add("hidden");
+          mainEl.classList.add("show");
+          startTypewriter();
+        }, 700);
+      });
+
+      /* ---------- fancy letter-by-letter reveal (reused everywhere) ---------- */
+      function typeFancy(el, text, speed) {
+        speed = speed || 22;
+        el.innerHTML = "";
+        var frag = document.createDocumentFragment();
+        text.split("").forEach(function (ch, idx) {
+          var span = document.createElement("span");
+          span.className = "letterspan";
+          span.style.animationDelay = idx * speed + "ms";
+          span.textContent = ch === " " ? "\u00A0" : ch;
+          frag.appendChild(span);
+        });
+        el.appendChild(frag);
+      }
+      function startTypewriter() {
+        var el = document.getElementById("typewriter");
+        var text =
+          "Пусть этот год принесёт больше поводов для смеха, чем для будильников, и больше тепла, чем обычно бывает в календаре. С этим днём — особенным, потому что в нём ты.";
+        typeFancy(el, text, 18);
+      }
+
+      /* ---------- static personal data ---------- */
+      document.getElementById("nameField").textContent = CONFIG.name;
+
+      function calculateAge(year) {
+        return new Date().getFullYear() - year;
+      }
+
+      var age = calculateAge(CONFIG.birthYear);
+      var ageResult = document.getElementById("ageResult");
+      ageResult.textContent =
+        age +
+        (age === 1
+          ? " год прожито ярко"
+          : age < 5
+            ? " года прожито ярко"
+            : " лет прожито ярко");
+
+      /* ---------- history ---------- */
+      var historyList = document.getElementById("historyList");
+
+      CONFIG.history.forEach(function (item) {
+        var row = document.createElement("div");
+        row.className = "tl-item";
+        row.innerHTML =
+          '<div class="tl-dot">' +
+          item.icon +
+          "</div>" +
+          '<div class="tl-text">' +
+          '<span class="tl-year">' +
+          item.year +
+          "</span>" +
+          '<div class="tl-desc">' +
+          item.text +
+          "</div>" +
+          "</div>";
+        historyList.appendChild(row);
+      });
+
+      /* ---------- photos are set in CONFIG / images folder ---------- */
+
+      /* ---------- drag + flip polaroids ---------- */
+      document.querySelectorAll(".polaroid").forEach(function (card) {
+        var startX,
+          startY,
+          origLeft,
+          origTop,
+          moved,
+          table = document.getElementById("table");
+        card.addEventListener("pointerdown", function (e) {
+          if (e.target.closest("input")) return;
+          moved = false;
+          startX = e.clientX;
+          startY = e.clientY;
+          var rect = card.getBoundingClientRect();
+          var tRect = table.getBoundingClientRect();
+          origLeft = rect.left - tRect.left;
+          origTop = rect.top - tRect.top;
+          card.setPointerCapture(e.pointerId);
+          card.style.zIndex = 10;
+          function onMove(ev) {
+            var dx = ev.clientX - startX,
+              dy = ev.clientY - startY;
+            if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+            if (moved) {
+              card.style.left = origLeft + dx + "px";
+              card.style.top = origTop + dy + "px";
+            }
+          }
+          function onUp() {
+            card.removeEventListener("pointermove", onMove);
+            card.removeEventListener("pointerup", onUp);
+            if (!moved) {
+              card.classList.toggle("flipped");
+            }
+          }
+          card.addEventListener("pointermove", onMove);
+          card.addEventListener("pointerup", onUp);
+        });
+      });
+
+      /* ---------- candle blow: mic or click ---------- */
+      var cakeWrap = document.getElementById("cakeWrap");
+      var micStatus = document.getElementById("micStatus");
+      var wishReveal = document.getElementById("wishReveal");
+      function doBlow() {
+        if (cakeWrap.classList.contains("blown")) return;
+        cakeWrap.classList.add("blown");
+        wishReveal.classList.add("show");
+        burstConfetti(60);
+      }
+      document.getElementById("blowBtn").addEventListener("click", doBlow);
+
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then(function (stream) {
+            micStatus.textContent = "микрофон включён — дуй!";
+            var ctx2 = new (window.AudioContext || window.webkitAudioContext)();
+            var source = ctx2.createMediaStreamSource(stream);
+            var analyser = ctx2.createAnalyser();
+            analyser.fftSize = 512;
+            source.connect(analyser);
+            var data = new Uint8Array(analyser.frequencyBinCount);
+            var quietFrames = 0;
+            (function poll() {
+              if (cakeWrap.classList.contains("blown")) {
+                stream.getTracks().forEach(function (t) {
+                  t.stop();
+                });
+                return;
+              }
+              analyser.getByteFrequencyData(data);
+              var sum = 0;
+              for (var i = 0; i < data.length; i++) sum += data[i];
+              var avg = sum / data.length;
+              if (avg > 55) {
+                doBlow();
+                stream.getTracks().forEach(function (t) {
+                  t.stop();
+                });
+                return;
+              }
+              requestAnimationFrame(poll);
+            })();
+          })
+          .catch(function () {
+            micStatus.textContent = "микрофон недоступен — жми кнопку";
+          });
+      } else {
+        micStatus.textContent = "микрофон не поддерживается — жми кнопку";
+      }
+
+      /* ---------- confetti ---------- */
+      var canvas = document.getElementById("confetti");
+      var ctx = canvas.getContext("2d");
+      function resize() {
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+      }
+      resize();
+      window.addEventListener("resize", resize);
+      var colors = ["#F2B807", "#D6274B", "#FF7AA2", "#3FD6B0"];
+      var particles = [],
+        running = false;
+      function burstConfetti(count) {
+        var reduce =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduce) return;
+        for (var i = 0; i < count; i++) {
+          particles.push({
+            x: canvas.width / 2 + (Math.random() - 0.5) * 160,
+            y: canvas.height * 0.3,
+            w: 6 + Math.random() * 6,
+            h: 8 + Math.random() * 10,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            vx: (Math.random() - 0.5) * 8,
+            vy: -5 - Math.random() * 4,
+            rot: Math.random() * 360,
+            rotSpeed: (Math.random() - 0.5) * 10,
+            life: 0,
+            maxLife: 80 + Math.random() * 40,
+          });
+        }
+        if (!running) {
+          running = true;
+          requestAnimationFrame(tick);
+        }
+      }
+      function tick() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = particles.length - 1; i >= 0; i--) {
+          var p = particles[i];
+          p.vy += 0.15;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.rotSpeed;
+          p.life++;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, 1 - p.life / p.maxLife);
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+          if (p.life > p.maxLife) particles.splice(i, 1);
+        }
+        if (particles.length > 0) {
+          requestAnimationFrame(tick);
+        } else {
+          running = false;
+        }
+      }
+
+      /* ---------- mood letters ---------- */
+      var letterMessages = {
+        sad: {
+          icon: "💌",
+          text: "Если сейчас тяжело — это пройдёт. А пока помни: ты уже пережил(а) каждый свой плохой день до единого. Счёт в твою пользу.",
+        },
+        night: {
+          icon: "🌙",
+          text: "Если читаешь это ночью — просто знай, что где-то далеко кто-то думает о тебе именно сейчас. Спи спокойно, завтра будет добрее.",
+        },
+        smile: {
+          icon: "😂",
+          text: "Хочешь улыбнуться? Вспомни тот момент, который до сих пор кажется тебе смешным, даже если рассказать его никто до конца не поймёт. Вот эта улыбка — она твоя.",
+        },
+        now: {
+          icon: "❤️",
+          text: "Прямо сейчас: ты важен(на), ты на своём месте, и этот день — твой. С днём рождения.",
+        },
+      };
+      var letterModal = document.getElementById("letterModal");
+      var letterIcon = document.getElementById("letterIcon");
+      var letterText = document.getElementById("letterText");
+      document.querySelectorAll(".mood-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var m = letterMessages[btn.getAttribute("data-mood")];
+          letterIcon.textContent = m.icon;
+          letterModal.classList.add("show");
+          typeFancy(letterText, m.text, 16);
+        });
+      });
+      document
+        .getElementById("closeLetter")
+        .addEventListener("click", function () {
+          letterModal.classList.remove("show");
+        });
+      letterModal.addEventListener("click", function (e) {
+        if (e.target === letterModal) letterModal.classList.remove("show");
+      });
+
+      /* ---------- music lyric reveal on scroll into view ---------- */
+      var lyricDone = false;
+      var lyricEl = document.getElementById("lyricText");
+      var lyricText =
+        "Если бы у нас была общая песня — это была бы именно она.";
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting && !lyricDone) {
+              lyricDone = true;
+              typeFancy(lyricEl, lyricText, 22);
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
+      io.observe(document.querySelector("section.music"));
+
+      /* ---------- universe / starfield ---------- */
+      var sky = document.getElementById("sky");
+      var universeCaption = document.getElementById("universeCaption");
+      for (var i = 0; i < 60; i++) {
+        var dot = document.createElement("div");
+        dot.className = "dot";
+        dot.style.left = Math.random() * 100 + "%";
+        dot.style.top = Math.random() * 100 + "%";
+        dot.style.animationDelay = Math.random() * 3 + "s";
+        sky.appendChild(dot);
+      }
+      var personName = CONFIG.name || "тебя";
+      var wishStars = [
+        {
+          left: 50,
+          top: 42,
+          named: true,
+          icon: "⭐",
+          text: "Если бы мне пришлось выбрать одну звезду из всей этой вселенной — я бы выбрал(а) эту.",
+        },
+        {
+          left: 20,
+          top: 20,
+          icon: "✨",
+          text: "Пусть каждый день будет чуть добрее прошлого.",
+        },
+        {
+          left: 78,
+          top: 22,
+          icon: "✨",
+          text: "Пусть рядом всегда будут те, кто искренне любит.",
+        },
+        {
+          left: 15,
+          top: 70,
+          icon: "✨",
+          text: "Пусть мечты сбываются быстрее, чем ты успеваешь их загадывать.",
+        },
+        {
+          left: 82,
+          top: 68,
+          icon: "✨",
+          text: "Пусть удача помнит твой адрес.",
+        },
+      ];
+      wishStars.forEach(function (s) {
+        var star = document.createElement("button");
+        star.className = "wish-star" + (s.named ? " named" : "");
+        star.style.left = s.left + "%";
+        star.style.top = s.top + "%";
+        star.textContent = s.icon;
+        star.addEventListener("click", function () {
+          var text = s.named ? personName + ": " + s.text : s.text;
+          typeFancy(universeCaption, text, 16);
+        });
+        sky.appendChild(star);
+      });
+    </script>
+  </body>
+</html>
